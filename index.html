@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<div class="filter-bar">
+  <select id="weaponFilter" onchange="render()">
+    <option value="all">全武器</option>
+  </select>
+
+  <select id="stageFilter" onchange="render()">
+    <option value="all">全ステージ</option>
+  </select>
+</div>
+
+<div id="list"></div>
+
+<script src="./script.js"></script>
+<script>
+function render() {
+  const battles = getBattles();
+
+  const wf = document.getElementById("weaponFilter").value;
+  const sf = document.getElementById("stageFilter").value;
+
+  let filtered = battles;
+
+  if (wf !== "all") filtered = filtered.filter(b => b.weapon === wf);
+  if (sf !== "all") filtered = filtered.filter(b => b.stage === sf);
+
+  document.getElementById("list").innerHTML =
+    filtered.map(b => `
+      <div class="card ${b.result}" onclick="openBattle(${b.id})">
+        <div>${b.stage}</div>
+        <div>${b.weapon}</div>
+        <div>${b.kills} / ${b.deaths}</div>
+      </div>
+    `).join("");
+}
+
+function openBattle(id) {
+  location.href = "battle.html?id=" + id;
+}
+
+render();
+</script>
+
+</body>
+</html>
